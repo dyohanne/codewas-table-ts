@@ -47,6 +47,8 @@ export interface ConceptMetadata {
   conceptCode?: string | null
 }
 
+export type AncestorConceptMap = Record<string, ConceptMetadata>
+
 // ─── Top-level Concept row ───
 export interface ConceptRow {
   conceptId: number
@@ -94,8 +96,14 @@ export interface ConceptRow {
 
 export interface ConceptTableProps {
   data: ConceptRow[]
-  setData: React.Dispatch<React.SetStateAction<ConceptRow[] | null>>
+  ancestorConceptsById: AncestorConceptMap
+  setPayload: (payload: CodeWASPayload | ConceptRow[]) => void
   pageView: PageViewOptions
+}
+
+export interface CodeWASPayload {
+  results: ConceptRow[]
+  ancestorConcepts?: AncestorConceptMap
 }
 
 // Shape of a saved preset stored in localStorage

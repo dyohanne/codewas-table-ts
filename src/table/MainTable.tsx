@@ -8,11 +8,15 @@ import { countModeLabel, useColumns } from "./ColumnFactory"
 import { TopToolbar } from "./TopToolbar"
 import { Heatmap } from "../components/charts/Heatmap"
 import { Scatter } from "../components/charts/Scatter"
-import { sumBinaryCount } from "../utils/aggregations"
 
 // ─── main table ───────────────────────────────────────────────────────────
 
-export default function MainTable({ data, setData, pageView }: ConceptTableProps) {
+export default function MainTable({
+  data,
+  ancestorConceptsById,
+  setPayload,
+  pageView,
+}: ConceptTableProps) {
   const tableContainerRef = useRef(null)
   const [countModeFilter, setCountModeFilter] = useState<"code" | "descendant" | "all">("all")
 
@@ -53,14 +57,15 @@ export default function MainTable({ data, setData, pageView }: ConceptTableProps
 
     ;(formattedData ?? []).forEach((row) => {
       concepts[row.conceptId] = row
-      ;(row.ancestorConcepts ?? []).forEach((ancestor) => {
-        if (!ancestor?.conceptId) return
-        concepts[ancestor.conceptId] = ancestor
-      })
+    })
+
+    Object.values(ancestorConceptsById).forEach((ancestor) => {
+      if (!ancestor?.conceptId) return
+      concepts[ancestor.conceptId] = ancestor
     })
 
     return concepts
-  }, [formattedData])
+  }, [ancestorConceptsById, formattedData])
   // const conceptsById = useMemo<Record<number, ConceptRow>>(
   //   () => Object.fromEntries((formattedData ?? []).map((row) => [row.conceptId, row])),
   //   [formattedData],
@@ -162,7 +167,9 @@ export default function MainTable({ data, setData, pageView }: ConceptTableProps
     enableStickyHeader: true,
 
     muiTableContainerProps: { sx: { maxHeight: "70vh" }, ref: tableContainerRef },
-    renderTopToolbarCustomActions: ({ table }) => <TopToolbar table={table} setData={setData} />,
+    renderTopToolbarCustomActions: ({ table }) => (
+      <TopToolbar table={table} setPayload={setPayload} />
+    ),
 
     // Apply to all header cells globally
     muiTableHeadCellProps: {

@@ -2,7 +2,7 @@ import { FileDownload } from "@mui/icons-material"
 import { Box, Divider, Button } from "@mui/material"
 import type { MRT_TableInstance, MRT_Row } from "material-react-table"
 import InputFileUpload from "../components/FileUpload"
-import type { ConceptRow } from "../utils/types"
+import type { CodeWASPayload, ConceptRow } from "../utils/types"
 import { InfoFilter } from "./column-filters/InfoFilter"
 
 import { mkConfig, generateCsv, download } from "export-to-csv"
@@ -15,10 +15,10 @@ const csvConfig = mkConfig({
 
 interface TopToolbarProps {
   table: MRT_TableInstance<ConceptRow>
-  setData: React.Dispatch<React.SetStateAction<ConceptRow[] | null>>
+  setPayload: (payload: CodeWASPayload | ConceptRow[]) => void
 }
 
-export function TopToolbar({ table, setData }: TopToolbarProps) {
+export function TopToolbar({ table, setPayload }: TopToolbarProps) {
   const handleExportRows = (rows: MRT_Row<ConceptRow>[]) => {
     const rowData = rows.map((row) => row.original)
     const exportName = `${new Date().toString()}_filtered_data`
@@ -48,7 +48,7 @@ export function TopToolbar({ table, setData }: TopToolbarProps) {
           flexWrap: "wrap",
         }}
       >
-        <InputFileUpload setData={setData} />
+        <InputFileUpload setPayload={setPayload} />
         <Divider orientation="vertical" flexItem />
 
         <Button

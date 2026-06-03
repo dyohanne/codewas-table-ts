@@ -33,7 +33,7 @@ const theme = createTheme({
 })
 
 export default function App() {
-  const { data, setData, loading, error, filePath } = useDataSource()
+  const { data, ancestorConceptsById, setPayload, loading, error, filePath } = useDataSource()
   const [pageView, setPageView] = useState<PageViewOptions>("table")
 
   return (
@@ -50,9 +50,14 @@ export default function App() {
         {loading && <Alert severity="info">Loading data from URL...</Alert>}
         {error && <Alert severity="error">Error: {error}</Alert>}
         {!data ? (
-          <InputFileUpload setData={setData} />
+          <InputFileUpload setPayload={setPayload} />
         ) : (
-          <MainTable data={data} setData={setData} pageView={pageView} />
+          <MainTable
+            data={data}
+            ancestorConceptsById={ancestorConceptsById}
+            setPayload={setPayload}
+            pageView={pageView}
+          />
         )}
       </Container>
       <Footer text={filePath} pageView={pageView} setPageView={setPageView} />

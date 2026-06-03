@@ -325,12 +325,12 @@ export const makeInfoColumn = (
             <p>Ancestors</p>
           </Tooltip>
         ),
-        accessorKey: "ancestorConcepts",
+        accessorKey: "ancestorConceptIds",
         Cell: (row) => (
           <Box>
-            {row.cell.getValue<ConceptMetadata[]>()?.map((c) => (
-              <Typography variant="body2" key={c.conceptId}>
-                {c.conceptId} – {c.conceptName ?? "N/A"}
+            {row.cell.getValue<number[]>()?.map((id) => (
+              <Typography variant="body2" key={id}>
+                {id}
               </Typography>
             ))}
           </Box>

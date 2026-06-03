@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles"
 import Button from "@mui/material/Button"
 import type React from "react"
-import type { ConceptRow } from "../utils/types"
+import type { CodeWASPayload, ConceptRow } from "../utils/types"
 import { FileUpload } from "@mui/icons-material"
 
 const VisuallyHiddenInput = styled("input")({
@@ -16,15 +16,19 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 })
 
-export default function InputFileUpload({ setData }: { setData: (data: ConceptRow[]) => void }) {
+export default function InputFileUpload({
+  setPayload,
+}: {
+  setPayload: (payload: CodeWASPayload | ConceptRow[]) => void
+}) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
     if (file.type !== "application/json") return
     const reader = new FileReader()
     reader.onload = (event: ProgressEvent<FileReader>) => {
-      const parsed = JSON.parse(event.target?.result as string)
-      setData(parsed)
+      const parsed = JSON.parse(event.target?.result as string) as CodeWASPayload | ConceptRow[]
+      setPayload(parsed)
     }
     reader.readAsText(file)
   }
