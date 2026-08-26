@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Divider,
   Grid,
   Paper,
   Stack,
@@ -68,7 +67,7 @@ const ANALYSIS_DESCRIPTIONS: Record<AnalysisSectionKey, string> = {
 }
 
 // Every analysis card shares the same shell: a title, the results on the left, and the description
-// beneath the results.
+// on the right.
 function AnalysisCard({
   title,
   sectionKey,
@@ -83,16 +82,16 @@ function AnalysisCard({
     <Paper variant="outlined" sx={{ p: 2, height: "100%" }}>
       <Stack spacing={1}>
         <Typography variant="h6">{title}</Typography>
-        <Stack spacing={1.25}>
-          <Stack spacing={1}>{children}</Stack>
-          <Divider />
-          <Stack spacing={0.25}>
-            <Typography variant="subtitle2">How to interpret</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.45 }}>
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, sm: 7 }}>
+            <Stack spacing={1}>{children}</Stack>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 5 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.4 }}>
               {description}
             </Typography>
-          </Stack>
-        </Stack>
+          </Grid>
+        </Grid>
       </Stack>
     </Paper>
   )
