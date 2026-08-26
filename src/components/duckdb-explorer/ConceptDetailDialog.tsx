@@ -60,15 +60,15 @@ const ANALYSIS_DESCRIPTIONS: Record<AnalysisSectionKey, string> = {
   counts:
     "Compares the average number of records per person (negative-binomial test). Effect is the incidence rate ratio (IRR; case mean / control mean): values above 1 mean more records in cases; values below 1 mean fewer. The displayed SMD is a standardized log rate-ratio statistic: log(IRR) / SE[log(IRR)], not the usual mean-difference SMD.",
   age:
-    "Compares age at first record among people with a record (Welch two-sample t-test). Effect is case mean minus control mean, in years: positive means a later age in cases and negative means an earlier age. SMD is (case mean - control mean) / pooled SD. It does not compare how often the concept occurs.",
+    "Compares age at first record among people with a record (Welch two-sample t-test). Effect is case mean minus control mean, in years: positive means a later age in cases and negative means an earlier age. SMD is (case mean - control mean) / pooled SD. Only people with a recorded event contribute to this comparison.",
   days:
-    "Compares days from cohort entry to first record among people with a record (Welch two-sample t-test). Effect is case mean minus control mean, in days: positive means later in cases and negative means earlier. SMD is (case mean - control mean) / pooled SD. It does not compare how often the concept occurs.",
+    "Compares days from cohort entry to first record among people with a record (Welch two-sample t-test). Effect is case mean minus control mean, in days: positive means later in cases and negative means earlier. SMD is (case mean - control mean) / pooled SD. Only people with a recorded event contribute to this comparison.",
   continuous:
     "Compares recorded numeric values among people with a value (Welch two-sample t-test). Effect is case mean minus control mean in the displayed unit: positive means higher values in cases and negative means lower. SMD is (case mean - control mean) / pooled SD.",
 }
 
 // Every analysis card shares the same shell: a title, the results on the left, and the description
-// on the right.
+// beneath the results.
 function AnalysisCard({
   title,
   sectionKey,
@@ -83,16 +83,16 @@ function AnalysisCard({
     <Paper variant="outlined" sx={{ p: 2, height: "100%" }}>
       <Stack spacing={1}>
         <Typography variant="h6">{title}</Typography>
-        <Grid container spacing={2}>
-          <Grid size={{ xs: 12, sm: 7 }}>
-            <Stack spacing={1}>{children}</Stack>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 5 }}>
-            <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.4 }}>
+        <Stack spacing={1.25}>
+          <Stack spacing={1}>{children}</Stack>
+          <Divider />
+          <Stack spacing={0.25}>
+            <Typography variant="subtitle2">How to interpret</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.45 }}>
               {description}
             </Typography>
-          </Grid>
-        </Grid>
+          </Stack>
+        </Stack>
       </Stack>
     </Paper>
   )
