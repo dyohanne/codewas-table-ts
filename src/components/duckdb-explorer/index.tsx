@@ -3,6 +3,7 @@ import {
   Alert,
   Box,
   CircularProgress,
+  Divider,
   FormControl,
   InputLabel,
   MenuItem,
@@ -517,7 +518,7 @@ export default function DuckDbExplorer({
       // Pinning state holds *leaf* column ids only — TanStack matches them against each column's
       // leaves, so the "info" group id would never resolve. Its two leaves have to be named instead.
       columnPinning: { left: ["mrt-row-expand", "conceptInfo", "ancestorConceptIds", "info"] },
-      showColumnFilters: true,
+      showColumnFilters: false,
     },
     rowCount: tableMode === "flat" ? tableRowCount : undefined,
     state: {
@@ -683,21 +684,33 @@ export default function DuckDbExplorer({
   return (
     <Stack sx={{ flex: 1, minHeight: 0 }}>
       <Box sx={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
-        {cohortsInfo && <CohortsInfoTable cohortsInfo={cohortsInfo} />}
-        <DuckDbFilterBar
-          table={table}
-          appliedColumnFilters={appliedColumnFilters}
-          commitColumnFilters={commitColumnFilters}
-          countMode={countMode}
-          setCountMode={setCountMode}
-          selectedDomain={selectedDomain}
-          setSelectedDomain={setSelectedDomain}
-          appliedSearchText={appliedSearchText}
-          commitSearchText={commitSearchText}
-          isDirty={filtersDirty}
-          onApply={applyFilters}
-          rowCount={tableRowCount}
-        />
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            // backgroundColor: "background.paper",
+            borderBottom: "1px solid",
+            borderColor: "divider",
+            fontSize: 12,
+          }}
+        >
+          {cohortsInfo && <CohortsInfoTable cohortsInfo={cohortsInfo} />}
+          <Divider orientation="vertical" flexItem />
+          <DuckDbFilterBar
+            table={table}
+            appliedColumnFilters={appliedColumnFilters}
+            commitColumnFilters={commitColumnFilters}
+            countMode={countMode}
+            setCountMode={setCountMode}
+            selectedDomain={selectedDomain}
+            setSelectedDomain={setSelectedDomain}
+            appliedSearchText={appliedSearchText}
+            commitSearchText={commitSearchText}
+            isDirty={filtersDirty}
+            onApply={applyFilters}
+            rowCount={tableRowCount}
+          />
+        </Stack>
         {(tableLoading || chartLoading || hierarchyLoading || exportLoading) && (
           <Box
             sx={{
