@@ -211,8 +211,10 @@ function buildSummaryQueryCtes(countMode: string, domainId: string, searchText: 
         b.conceptId,
         b.domainId,
         b.countMode,
-        MAX(case_cov.sumValue) AS binaryCaseYes,
-        MAX(control_cov.sumValue) AS binaryControlYes,
+        -- CodeWAS represents a zero count by omitting that cohort/concept row.
+        -- Mirror the statistical-test construction here so the viewer displays zero rather than N/A.
+        COALESCE(MAX(case_cov.sumValue), 0) AS binaryCaseYes,
+        COALESCE(MAX(control_cov.sumValue), 0) AS binaryControlYes,
         MAX(case_totals.cohortSubjects) AS binaryTotalCases,
         MAX(control_totals.cohortSubjects) AS binaryTotalControls,
         MIN(st.pValue) AS binaryPValue,
